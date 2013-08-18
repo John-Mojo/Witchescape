@@ -109,7 +109,8 @@ border-radius:10px;
     
     
     var pumpkin_bullets = [];
-    pumpkin_bullets[0] = new pumpkinhit(0,0,0.1,0); 
+    for(var j = 0 ; j<3 ; j++)
+    pumpkin_bullets[j] = new pumpkinhit(0,0,0.1,0); 
     
    // var pumpkin = new pumpkinhit(); 
     var broomht = new broom();
@@ -295,20 +296,22 @@ function newBullet(e) {
     }
 
 function destroyBullet()
-   {     
+   {     var index;
      for(j = 0; j < pumpkin_bullets.length; j++ )
-	  {
+	  { index = pumpkin_bullets.indexOf(pumpkin_bullets[j]);
 
      if (pumpkin_bullets[j].px > can.width)
 	   {
     	pumpkin_bullets[j].px = 0;
-    	 pumpkin_bullets.pop();
+    	pumpkin_bullets.splice(index, 1);
+    	 k--;
        
 	   }
     if (pumpkin_bullets[j].py > can.height)
 	   {
     	pumpkin_bullets[j].tlapse = 0;
-    	 pumpkin_bullets.pop();
+    	pumpkin_bullets.splice(index, 1);
+    	 k--;
 	  
 	   }
     
@@ -324,10 +327,10 @@ function animate() {
 		lightning();
 		drawbroom();
 		drawPumpkins();
-	    //drawBats();
+	    drawBats();
 		drawBullet();
-		hitbats();
-		//destroyBullet();
+		//hitbats();
+		destroyBullet();
 		
 		if(Math.random()*1000<3 && y1!=1 && y2!=1)	
 		{
@@ -550,7 +553,7 @@ function drawbroom() {
 
 
 function hitbats()
-{ 
+{   var index;
 
 	bat.onload = function () {
     	batReady = true;
@@ -560,15 +563,19 @@ function hitbats()
    	
 	for(j = 0; j < pumpkin_bullets.length ; j++ ) 
 	{
+	  index = pumpkin_bullets.indexOf(pumpkin_bullets[j]);
+		
 	if(collide[0])
 	{  ctx.drawImage(bat, changebat.xBack +750,height.ht ,40 , 40);
-	   if((changebat.xBack+750-pumpkin_bullets[j].px)<40 && (changebat.xBack+750-pumpkin_bullets[j].px)>-20)//subtract x axis of bullet to compare 
+	   if((changebat.xBack+750-pumpkin_bullets[j].px)<40 && (changebat.xBack+750-pumpkin_bullets[j].px)>-20 )//subtract x axis of bullet to compare 
 				{
 				if((pumpkin_bullets[j].py-height.ht)<20 && (pumpkin_bullets[j].py-height.ht)>-40)
 					{
 						collide[0]=0;
 						if(sc.score<100)
-							sc.score-=100;
+							sc.score+=10;
+					     	pumpkin_bullets.splice(index, 1);
+						k--;
 					}
 				}
 	}
@@ -576,26 +583,30 @@ function hitbats()
 	
 	if(collide[1])
 	{   ctx.drawImage(bat, changebat.xBack +1050,height2.ht ,40 , 40);
-	 	if((changebat.xBack+900-pumpkin_bullets[j].px)<20 && (changebat.xBack+900-pumpkin_bullets[j].px)>-10)//subtract x axis of witch to compare
+	 	if((changebat.xBack+900-pumpkin_bullets[j].px)<40 && (changebat.xBack+900-pumpkin_bullets[j].px)>-20)//subtract x axis of witch to compare
 		{
 			if((pumpkin_bullets[j].py-height1.ht)<20 && (pumpkin_bullets[j].py-height1.ht)>-40)
 			{
 				collide[1]=0;
 				if(sc.score<100)
-					sc.score-=100;
+					sc.score+=10;
+			    	pumpkin_bullets.splice(index, 1);
+				k--;
 			}
 		}
 	}
 	
 	if(collide[2])
 	{   ctx.drawImage(bat, changebat.xBack +900,height1.ht ,40 , 40);
-	 	if((changebat.xBack+1050-pumpkin_bullets[j].px)<40 && (changebat.xBack+1050-pumpkin_bullets[j].px)>-40)//subtract x axis of witch to compare
+	 	if((changebat.xBack+1050-pumpkin_bullets[j].px)<40 && (changebat.xBack+1050-pumpkin_bullets[j].px)>-20)//subtract x axis of witch to compare
 		{
-			if((pumpkin_bullets[j].py-height2.ht)<20 && (pumpkin_bullets[j].py-height2.ht)>-40)
+			if((pumpkin_bullets[j].py-height2.ht)<20 && (pumpkin_bullets[j].py-height2.ht)>-40 )
 			{
 				collide[2]=0;
 				if(sc.score<100)
-					sc.score-=100;
+					sc.score+=10;
+			     	pumpkin_bullets.splice(index, 1);
+				k--;
 			}
 		}
 	}
@@ -613,11 +624,11 @@ function drawBats(){
 			};
        	changebat.xBack -= 7;
 				
-      /*
+      
        	for (var bb = 0 ; bb<3 ; bb++)
-       	{ctx.drawImage(bat, changebat.xBack +750,big_bat[bb].ht ,40 , 40);
+       	{ctx.drawImage(bat, changebat.xBack +big_bat[bb].pos_space,big_bat[bb].ht ,40 , 40);
 		  if(big_bat[bb].exist)
-		{   big_bat[bb].ht = Math.random()*200+50;
+		{  
 			if((changebat.xBack+big_bat[bb].pos_space-broomht.shipX)<60 && (changebat.xBack+big_bat[bb].pos_space-broomht.shipX)>-20)//subtract x axis of witch to compare 
 					{
 					if((broomht.shipY-big_bat[bb].ht)<40 && (broomht.shipY-big_bat[bb].ht)>-60)
@@ -629,51 +640,10 @@ function drawBats(){
 					}
         }
 		  
-       	} */
+       	} 
        	
-       		ctx.drawImage(bat, changebat.xBack +750,height.ht ,40 , 40);
-				if(collide[0])
-				{
-					if((changebat.xBack+750-broomht.shipX)<60 && (changebat.xBack+750-broomht.shipX)>-20)//subtract x axis of witch to compare
-    						{
-    						if((broomht.shipY-height.ht)<40 && (broomht.shipY-height.ht)>-60)
-    							{
-    								collide[0]=0;
-    								if(sc.score<100)
-										sc.score-=5;
-    							}
-    						}
-				}
-				ctx.drawImage(bat, changebat.xBack +900,height1.ht ,40 , 40);
-				if(collide[1])
-				{
-				 	if((changebat.xBack+900-broomht.shipX)<60 && (changebat.xBack+900-broomht.shipX)>-20)//subtract x axis of witch to compare
-    				{
-    					if((broomht.shipY-height1.ht)<40 && (broomht.shipY-height1.ht)>-60)
-    					{
-    						collide[1]=0;
-    						if(sc.score<100)
-								sc.score-=5;
-    					}
-    				}
-				}
-				ctx.drawImage(bat, changebat.xBack +1050,height2.ht ,40 , 40);
-				if(collide[2])
-				{
-				 	if((changebat.xBack+1050-broomht.shipX)<60 && (changebat.xBack+1050-broomht.shipX)>-20)//subtract x axis of witch to compare
-    				{
-    					if((broomht.shipY-height2.ht)<40 && (broomht.shipY-height2.ht)>-60)
-    					{
-    						collide[2]=0;
-    						if(sc.score<100)
-								sc.score-=5;
-    					}
-    				}
-				}
-				
-				
-				
-    		}
+   
+   }
     		
 function drawPumpkins() {        	
     			var k1=fruit1.arr,k2=fruit2.arr;
@@ -758,12 +728,17 @@ function resetTargets()  // make changes
 				}
 				
 			if(changebat.xBack<-1200)
-				{
+				{ 
 					changebat.xBack += 1200; // create a for loop for bats here 
 					collide=[1,1,1];
+				  	for (var bb = 0 ; bb<3 ; bb++)
+				  	   big_bat[bb].ht = Math.random()*250+bb*50;
+					
+					
+				/*	
 					height.ht=Math.random()*200+100;
 					height1.ht=Math.random()*250+50;
-					height2.ht=Math.random()*300;
+					height2.ht=Math.random()*300; */
 				}
 			
 			if (changebg.xBack <= -1 * 1200)
@@ -892,4 +867,4 @@ function colonyofbats(){
 		
 		<img id="back" style="display:none" src="BG4.png" />
 </body>
-</html>>
+</html>
