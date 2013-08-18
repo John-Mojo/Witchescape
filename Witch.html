@@ -98,6 +98,7 @@ border-radius:10px;
 		this.ht = Math.random()*200+50; 
         this.pos_space;    
         this.exist = 1;
+        this.broomcol = 1;
 	}
  
     
@@ -130,7 +131,7 @@ border-radius:10px;
     var fruit2 = new points();
 
     var target1 = [1,1,1,1],target2 = [1,1,1,1] ,targetX = [], targetY = [], targetSpeed = 1.5, phase = 0.1, targets=4;
-	var collide = [1,1,1], l=0, m=0, n=0, bingo=1, y1=0, y2=0;
+	var l=0, m=0, n=0, bingo=1, y1=0, y2=0;
 	var bat_collide1=[],bat_collide2=[];
 	
 	for(var t=0;t<20;t++)
@@ -296,27 +297,25 @@ function newBullet(e) {
     }
 
 function destroyBullet()
-   {     var index;
+   { var index;
      for(j = 0; j < pumpkin_bullets.length; j++ )
 	  { index = pumpkin_bullets.indexOf(pumpkin_bullets[j]);
 
-     if (pumpkin_bullets[j].px > can.width)
-	   {
-    	pumpkin_bullets[j].px = 0;
-    	pumpkin_bullets.splice(index, 1);
-    	 k--;
+         if (pumpkin_bullets[j].px > can.width)
+	      {
+         	pumpkin_bullets[j].px = 0;
+          	pumpkin_bullets.splice(index, 1);
+            k--;
        
-	   }
-    if (pumpkin_bullets[j].py > can.height)
-	   {
-    	pumpkin_bullets[j].tlapse = 0;
-    	pumpkin_bullets.splice(index, 1);
-    	 k--;
+	      }
+         if (pumpkin_bullets[j].py > can.height)
+	     {
+    	   pumpkin_bullets[j].tlapse = 0;
+    	   pumpkin_bullets.splice(index, 1);
+    	   k--;
 	  
-	   }
-    
-	  
-	  }
+	     }
+      }
 
     }
 
@@ -329,7 +328,7 @@ function animate() {
 		drawPumpkins();
 	    drawBats();
 		drawBullet();
-		//hitbats();
+		hitbats();
 		destroyBullet();
 		
 		if(Math.random()*1000<3 && y1!=1 && y2!=1)	
@@ -353,9 +352,7 @@ function animate() {
 		}
      
 function model() {
-        // if there is a pumpkin, advance it 
-        // if (pumpkin_bullets[0].px)
-        
+      
           var speed = 3500;
           var gravity = 250;
           var t  = time/1000;
@@ -374,12 +371,10 @@ function model() {
             if (pumpkin_bullets[j].px > can.width)
         	   {
             	pumpkin_bullets[j].px = 0;
-                // pumpkin_bullets[j].exist= 0;
         	   }
             if (pumpkin_bullets[j].py > can.height)
         	   {
             	pumpkin_bullets[j].tlapse = 0;
-        	   // pumpkin_bullets[j].exist= 0;
         	   }
 			} 
         } 
@@ -555,64 +550,29 @@ function drawbroom() {
 function hitbats()
 {   var index;
 
-	bat.onload = function () {
-    	batReady = true;
-		};
-   	changebat.xBack -= 7;
-			
-   	
+	for(var bb = 0; bb<3 ; bb++ )
 	for(j = 0; j < pumpkin_bullets.length ; j++ ) 
 	{
 	  index = pumpkin_bullets.indexOf(pumpkin_bullets[j]);
 		
-	if(collide[0])
-	{  ctx.drawImage(bat, changebat.xBack +750,height.ht ,40 , 40);
-	   if((changebat.xBack+750-pumpkin_bullets[j].px)<40 && (changebat.xBack+750-pumpkin_bullets[j].px)>-20 )//subtract x axis of bullet to compare 
+	if(big_bat[bb].exist)
+	{ 
+	   if((changebat.xBack+big_bat[bb].pos_space-pumpkin_bullets[j].px)<40 && (changebat.xBack+big_bat[bb].pos_space-pumpkin_bullets[j].px)>-20 )//subtract x axis of bullet to compare 
 				{
-				if((pumpkin_bullets[j].py-height.ht)<20 && (pumpkin_bullets[j].py-height.ht)>-40)
-					{
-						collide[0]=0;
+				if((pumpkin_bullets[j].py-big_bat[bb].ht)<20 && (pumpkin_bullets[j].py-big_bat[bb].ht)>-40)
+					{ 
+					    big_bat[bb].exist = 0;
 						if(sc.score<100)
 							sc.score+=10;
 					     	pumpkin_bullets.splice(index, 1);
 						k--;
 					}
 				}
+	   
 	}
 	
-	
-	if(collide[1])
-	{   ctx.drawImage(bat, changebat.xBack +1050,height2.ht ,40 , 40);
-	 	if((changebat.xBack+900-pumpkin_bullets[j].px)<40 && (changebat.xBack+900-pumpkin_bullets[j].px)>-20)//subtract x axis of witch to compare
-		{
-			if((pumpkin_bullets[j].py-height1.ht)<20 && (pumpkin_bullets[j].py-height1.ht)>-40)
-			{
-				collide[1]=0;
-				if(sc.score<100)
-					sc.score+=10;
-			    	pumpkin_bullets.splice(index, 1);
-				k--;
-			}
-		}
 	}
-	
-	if(collide[2])
-	{   ctx.drawImage(bat, changebat.xBack +900,height1.ht ,40 , 40);
-	 	if((changebat.xBack+1050-pumpkin_bullets[j].px)<40 && (changebat.xBack+1050-pumpkin_bullets[j].px)>-20)//subtract x axis of witch to compare
-		{
-			if((pumpkin_bullets[j].py-height2.ht)<20 && (pumpkin_bullets[j].py-height2.ht)>-40 )
-			{
-				collide[2]=0;
-				if(sc.score<100)
-					sc.score+=10;
-			     	pumpkin_bullets.splice(index, 1);
-				k--;
-			}
-		}
-	}
-	
-	
-	} // for loop 
+   		
 	
 }
     	
@@ -626,14 +586,13 @@ function drawBats(){
 				
       
        	for (var bb = 0 ; bb<3 ; bb++)
-       	{ctx.drawImage(bat, changebat.xBack +big_bat[bb].pos_space,big_bat[bb].ht ,40 , 40);
+       	{
 		  if(big_bat[bb].exist)
-		{  
-			if((changebat.xBack+big_bat[bb].pos_space-broomht.shipX)<60 && (changebat.xBack+big_bat[bb].pos_space-broomht.shipX)>-20)//subtract x axis of witch to compare 
+		{  ctx.drawImage(bat, changebat.xBack +big_bat[bb].pos_space,big_bat[bb].ht ,40 ,40);
+			if((changebat.xBack+big_bat[bb].pos_space-broomht.shipX)<60 && (changebat.xBack+big_bat[bb].pos_space-broomht.shipX)>-20 && big_bat[bb].broomcol)//subtract x axis of witch to compare 
 					{
 					if((broomht.shipY-big_bat[bb].ht)<40 && (broomht.shipY-big_bat[bb].ht)>-60)
-						{
-					     	big_bat[bb].exist = 0;
+						{ big_bat[bb].broomcol = 0;
 							if(sc.score<100)
 								sc.score-=5;
 						}
@@ -730,15 +689,12 @@ function resetTargets()  // make changes
 			if(changebat.xBack<-1200)
 				{ 
 					changebat.xBack += 1200; // create a for loop for bats here 
-					collide=[1,1,1];
 				  	for (var bb = 0 ; bb<3 ; bb++)
-				  	   big_bat[bb].ht = Math.random()*250+bb*50;
+				  		{big_bat[bb].exist = 1;
+				  	     big_bat[bb].ht = Math.random()*250+bb*50;
+				  	     big_bat[bb].broomcol = 1;
+				  		}
 					
-					
-				/*	
-					height.ht=Math.random()*200+100;
-					height1.ht=Math.random()*250+50;
-					height2.ht=Math.random()*300; */
 				}
 			
 			if (changebg.xBack <= -1 * 1200)
