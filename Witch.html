@@ -94,6 +94,15 @@ border-radius:10px;
     	this.theta;
     	}
     
+    var ghost = function (){
+    	
+    	this.gx = 550;
+    	this.gy = 20;
+    	this.v;
+    	
+    }
+    
+    
     var batht=function() {					//for height of bats appearing			
 		this.ht = Math.random()*200+50; 
         this.pos_space;    
@@ -115,9 +124,10 @@ border-radius:10px;
     
    // var pumpkin = new pumpkinhit(); 
     var broomht = new broom();
-	
+	var ghostspawn  =  new ghost();
     var changebg = new background();
     var changebat = new background();
+    var changeghost = new background();
 	
 	var changesmallbat1 = new background();
 	var changesmallbat2 = new background();
@@ -160,10 +170,10 @@ border-radius:10px;
     //pumpkin collect 
     var pumpkin_collect_Ready = false;
     var pumpkin_collect_image = new Image();
-	
+ 
 	var lightReady = false;
 	var lightImage =new Image();
-
+    
 	var thunderReady1 = false;
 	var thunderImage1 = new Image();
 	var thunderReady2 = false;
@@ -252,11 +262,12 @@ function newTargets() {
            }
 		   
 function loadimages(){
-			broomimage.onload = function () {
-			broomReady = true;
-			};
-		broomimage.src = "witch.png";
 	
+	    broomimage.onload = function () {
+	    broomReady = true;
+	    };
+		broomimage.src = "witch.png";
+		
 		lightImage.onload = function () {
        	lightReady = true;
 		};
@@ -328,6 +339,7 @@ function animate() {
 		drawPumpkins();
 	    drawBats();
 		drawBullet();
+	
 		hitbats();
 		destroyBullet();
 		
@@ -659,8 +671,8 @@ function drawBullet() {
             ctx.drawImage(pumpkin_bullet_image,  pumpkin_bullets[j].px,  pumpkin_bullets[j].py, 25, 25);
           }
       }
-
-   
+     
+         
 function drawScore() {
     			document.getElementById("scoreupdate").innerHTML="PUMPKINS :"+" "+sc.score;
                 document.getElementById("bar").style.width=(sc.score*5)+"px";
@@ -668,7 +680,7 @@ function drawScore() {
 	
 function resetTargets()  // make changes   
 	{
-	// if background scrolled off screen, reset
+	// if background scrolled off screen, reset 
 			if (changesmallbat1.xBack <= -1 * 1200)
  				{
 					changesmallbat1.xBack += 1200;
@@ -696,6 +708,8 @@ function resetTargets()  // make changes
 				  		}
 					
 				}
+			
+	
 			
 			if (changebg.xBack <= -1 * 1200)
             	{
